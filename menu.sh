@@ -373,7 +373,7 @@ sleep 1
 
 #chown steam user to steam
 tput setaf 1; echo "Setting steam permissions" ; tput setaf 9;
-chown steam:steam -Rf /home/steam/*
+chown -Rf steam:steam /home/steam/*
 tput setaf 2; echo "Done" ; tput setaf 9;
 sleep 1
 
@@ -461,7 +461,7 @@ sleep 1
 
 #chown steam user permissions to all of user steam dir location
 tput setaf 1; echo "Setting steam account permissions to /home/steam/*" ; tput setaf 9; 
-chown steam:steam -Rf /home/steam/*
+chown -Rf steam:steam /home/steam/*
 tput setaf 2; echo "Done" ; tput setaf 9;
 sleep 1
 
@@ -550,13 +550,12 @@ function restore_world_data() {
 #init empty array
     declare -a backups
 #loop through backups and put in array
-    for file in ${backupPath}/*.tgz
-    do
+    for file in ${backupPath}/*.tgz; do
         backups=(${backups[*]} "$file")
-    done;
+    done
 #counter index
     bIndex=1
-    for item in "${backups[@]}";do
+    for item in "${backups[@]}"; do
  #print option [index]> [file name]
         basefile=$(basename "$item")
          echo "$bIndex> ${basefile} "
@@ -628,7 +627,7 @@ echo ""
 if [ "$confirmOfficialUpdates" == "y" ]; then
     tput setaf 2; echo "Using Thor's Hammer to apply Official Updates!" ; tput setaf 9; 
     /home/steam/steamcmd +login anonymous +force_install_dir ${valheimInstallPath} +app_update 896660 validate +exit
-    chown -R steam:steam ${valheimInstallPath}
+    chown -Rf steam:steam ${valheimInstallPath}
     echo ""
 else
     echo "Canceling all Official Updates for Valheim Server - because Loki sucks"
@@ -1185,4 +1184,3 @@ $(ColorBlue 'Choose an option:') "
 
 # Call the menu function
 menu
-done
