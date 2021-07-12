@@ -9,8 +9,12 @@
 
 
 #Current Options: DE=German, EN=English, FR=French, SP=Spanish"
-
-LANGUAGE=EN
+if [ "$1" == "" ]
+then
+        LANGUAGE=EN
+else
+        LANGUAGE=$1
+fi
 source lang/$LANGUAGE.conf
 
 
@@ -36,7 +40,7 @@ backupPath=/home/steam/backups
 ###############################################################
 
 # Set Menu Version for menu display
-mversion="2.1.7-Lofn"
+mversion="END OF LIFE upgrade to Njord Menu Please"
 
 
 ########################################################################
@@ -222,7 +226,7 @@ echo ""
     tput setaf 2; echo "$DRAW60" ; tput setaf 9;
     echo ""
       read -p "$PUBLIC_SERVER_ENTER_NAME" displayname
-    tput setaf 2; echo "$DRAW60" ; tput setaf 9;
+    tput setaf 2; echo "------------------------------------------------------------" ; tput setaf 9;
     echo ""
     clear
 # Take user input for Valheim Server World Database Generation
@@ -239,7 +243,7 @@ echo ""
 	tput setaf 2; echo "$DRAW60" ; tput setaf 9;
 	echo ""
         read -p "$WORLD_SET_WORLD_NAME_VAR" worldname
-	tput setaf 2; echo "$DRAW60" ; tput setaf 9;
+	tput setaf 2; echo "------------------------------------------------------------" ; tput setaf 9;
             [[ ${#worldname} -ge 4 && "$worldname" =~ ^[[:alnum:]]+$ ]] && break
         tput setaf 2; echo "$WORLD_SET_ERROR" ; tput setaf 9; 
 	tput setaf 2; echo "$WORLD_SET_ERROR_1" ; tput setaf 9; 
@@ -265,7 +269,7 @@ echo ""
     tput setaf 1; echo "$SERVER_ACCESS_BAD_EXAMPLE" ; tput setaf 9;
     tput setaf 2; echo "$DRAW60" ; tput setaf 9;
     read -p "$SERVER_ACCESS_ENTER_PASSWORD" password
-    tput setaf 2; echo "$DRAW60" ; tput setaf 9;
+    tput setaf 2; echo "------------------------------------------------------------" ; tput setaf 9;
         [[ ${#password} -ge 5 && "$password" == *[[:lower:]]* && "$password" == *[[:upper:]]* && "$password" =~ ^[[:alnum:]]+$ ]] && break
     tput setaf 2; echo "$SERVER_ACCESS_PASSWORD_ERROR" ; tput setaf 9;
     tput setaf 2; echo "$SERVER_ACCESS_PASSWORD_ERROR_1" ; tput setaf 9;
@@ -278,11 +282,11 @@ echo ""
     tput setaf 1; echo "$PUBLIC_ENABLED_DISABLE_INFO" ; tput setaf 9;
     tput setaf 2; echo "$DRAW60" ; tput setaf 9;
     tput setaf 2; echo "$PUBLIC_ENABLED_DISABLE_EXAMPLE_SHOW" ; tput setaf 9;
-    tput setaf 1; echo "$PUBLIC_ENABLED_DISABLE_EXAMPLS_LAN_NO_SHOW" ; tput setaf 9;
+    tput setaf 1; echo "$PUBLIC_ENABLED_DISABLE_EXAMPLE_LAN_NO_SHOW" ; tput setaf 9;
     tput setaf 2; echo "$DRAW60" ; tput setaf 9;
     echo ""
       read -p "$PUBLIC_ENABLED_DISABLE_INPUT" publicList
-    tput setaf 2; echo "$DRAW60" ; tput setaf 9;
+    tput setaf 2; echo "------------------------------------------------------------" ; tput setaf 9;
     echo ""
 
 
@@ -572,51 +576,52 @@ fi
 ########################################################################
 ######################beta updater for Valheim##########################
 ########################################################################
-#function check_apply_server_updates_beta() {
-#    echo ""
-#    echo "Downloading Official Valheim Repo Log Data for comparison only"
-#      repoValheim=$(/home/steam/steamcmd +login anonymous +app_info_update 1 +app_info_print 896660 +quit | grep -A10 branches | grep -A2 public | grep buildid | cut -d'"' -f4)
-#      echo "Official Valheim-: $repoValheim"
-#      localValheim=$(grep buildid ${valheimInstallPath}/steamapps/appmanifest_896660.acf | cut -d'"' -f4)
-#      echo "Local Valheim Ver: $localValheim"
-#      if [ "$repoValheim" == "$localValheim" ]; then
-#        echo "No new Updates found"
-#	sleep 2
-#	else
-#	echo "Update Found kicking process to Odin for updating!"
-#	sleep 2
-#        continue_with_valheim_update_install
-#        echo ""
-#     fi
-#     echo ""
-#}
-
 function check_apply_server_updates_beta() {
     echo ""
-    echo "$FUNCTION_APPLY_SERVER_UPDATES"
-      [ ! -d /opt/valheimtemp ] && mkdir -p /opt/valheimtemp
-      /home/steam/steamcmd +login anonymous +force_install_dir /opt/valheimtemp +app_update 896660 validate +exit
-      sed -e 's/[\t ]//g;/^$/d' /opt/valheimtemp/steamapps/appmanifest_896660.acf > appmanirepo.log
-      repoValheim=$(sed -n '11p' appmanirepo.log)
-      echo "$FUNCTION_APPLY_SERVER_UPDATES_OFFICIAL_VALHEIM_REPO $repoValheim"
-      sed -e 's/[\t ]//g;/^$/d' ${valheimInstallPath}/steamapps/appmanifest_896660.acf > appmanilocal.log
-      localValheim=$(sed -n '11p' appmanilocal.log)
-      echo "$FUNCTION_APPLY_SERVER_UPDATES_OFFICIAL_VALHEIM_LOCAL $localValheim"
+    echo "Downloading Official Valheim Repo Log Data for comparison only"
+      find "/home" "/root" -wholename "*/.steam/appcache/appinfo.vdf" | xargs -r rm -f --
+      repoValheim=$(/home/steam/steamcmd +login anonymous +app_info_update 1 +app_info_print 896660 +quit | grep -A10 branches | grep -A2 public | grep buildid | cut -d'"' -f4)
+      echo "Official Valheim-: $repoValheim"
+      localValheim=$(grep buildid ${valheimInstallPath}/steamapps/appmanifest_896660.acf | cut -d'"' -f4)
+      echo "Local Valheim Ver: $localValheim"
       if [ "$repoValheim" == "$localValheim" ]; then
-        echo "$FUNCTION_APPLY_SERVER_UPDATES_NO"
-        echo "$FUNCTION_APPLY_SERVER_UPDATES_CLEAN_TMP"
-        rm -Rf /opt/valheimtemp
-        rm appmanirepo.log
-        rm appmanilocal.log
-    sleep 2
-    else
-    echo "$FUNCTION_APPLY_SERVER_UPDATES_INFO"
-    sleep 2
+        echo "No new Updates found"
+	sleep 2
+	else
+	echo "Update Found kicking process to Odin for updating!"
+	sleep 2
         continue_with_valheim_update_install
         echo ""
      fi
      echo ""
 }
+
+#function check_apply_server_updates_beta() {
+#    echo ""
+#    echo "$FUNCTION_APPLY_SERVER_UPDATES"
+#      [ ! -d /opt/valheimtemp ] && mkdir -p /opt/valheimtemp
+#      /home/steam/steamcmd +login anonymous +force_install_dir /opt/valheimtemp +app_update 896660 validate +exit
+#      sed -e 's/[\t ]//g;/^$/d' /opt/valheimtemp/steamapps/appmanifest_896660.acf > appmanirepo.log
+#      repoValheim=$(sed -n '11p' appmanirepo.log)
+#      echo "$FUNCTION_APPLY_SERVER_UPDATES_OFFICIAL_VALHEIM_REPO $repoValheim"
+#      sed -e 's/[\t ]//g;/^$/d' ${valheimInstallPath}/steamapps/appmanifest_896660.acf > appmanilocal.log
+#      localValheim=$(sed -n '11p' appmanilocal.log)
+#      echo "$FUNCTION_APPLY_SERVER_UPDATES_OFFICIAL_VALHEIM_LOCAL $localValheim"
+#      if [ "$repoValheim" == "$localValheim" ]; then
+#        echo "$FUNCTION_APPLY_SERVER_UPDATES_NO"
+#        echo "$FUNCTION_APPLY_SERVER_UPDATES_CLEAN_TMP"
+#        rm -Rf /opt/valheimtemp
+#        rm appmanirepo.log
+#        rm appmanilocal.log
+#    sleep 2
+#    else
+#    echo "$FUNCTION_APPLY_SERVER_UPDATES_INFO"
+#    sleep 2
+#        continue_with_valheim_update_install
+#        echo ""
+#     fi
+#     echo ""
+#}
 ########################################################################
 ##############Verify Checking Updates for Valheim Server################
 ########################################################################
@@ -914,20 +919,6 @@ EOF
    echo ""
 }
 
-function write_public_on_config_and_restart() {
-    get_current_config
-    print_current_config
-    set_config_defaults
-    write_public_on_config_and_restart
-}
-
-function write_public_off_config_and_restart() {
-    get_current_config
-    print_current_config
-    set_config_defaults
-    write_config_and_restart
-}
-
 function change_public_display_name() {
     get_current_config
     print_current_config
@@ -1081,14 +1072,26 @@ function display_full_config() {
 ########################################################################
 ##########################MENUS STATUS VARIBLES#########################
 ########################################################################
+
 # Check Current Valheim REPO Build for menu display
 
 function check_official_valheim_release_build() {
-    if [[ -e "/home/steam/steamcmd" ]] ; then
-    currentOfficialRepo=$(/home/steam/steamcmd +login anonymous +app_info_update 1 +app_info_print 896660 +quit | grep -A10 branches | grep -A2 public | grep buildid | cut -d'"' -f4) 
-        echo $currentOfficialRepo
-    else 
-        echo "$NO_DATA";
+if [[ $(find "/home/steam/valheimserver/officialvalheimbuild" -mmin +59 -print) ]]; then
+      find "/home" "/root" -wholename "*/.steam/appcache/appinfo.vdf" | xargs -r rm -f --
+      currentOfficialRepo=$(/home/steam/steamcmd +login anonymous +app_info_update 1 +app_info_print 896660 +quit | grep -A10 branches | grep -A2 public | grep buildid | cut -d'"' -f4)
+      echo $currentOfficialRepo > /home/steam/valheimserver/officialvalheimbuild
+      chown steam:steam /home/steam/valheimserver/officialvalheimbuild
+      echo $currentOfficialRepo
+elif [ ! -f /home/steam/valheimserver/officialvalheimbuild ]; then
+      currentOfficialRepo=$(/home/steam/steamcmd +login anonymous +app_info_update 1 +app_info_print 896660 +quit | grep -A10 branches | grep -A2 public | grep buildid | cut -d'"' -f4)
+      echo $currentOfficialRepo > /home/steam/valheimserver/officialvalheimbuild
+      chown steam:steam /home/steam/valheimserver/officialvalheimbuild
+      echo $currentOfficialRepo
+elif [ -f /home/steam/valheimserver/officialvalheimbuild ]; then
+      currentOfficialRepo=$(cat /home/steam/valheimserver/officialvalheimbuild)
+      echo $currentOfficialRepo
+else
+      echo "$NO_DATA";
   fi
 }
 
@@ -1104,7 +1107,6 @@ localValheimAppmanifest=${valheimInstallPath}/steamapps/appmanifest_896660.acf
 }
 
 function check_menu_script_repo() {
-
 latestScript=$(curl --connect-timeout 10 -s https://api.github.com/repos/Nimdy/Dedicated_Valheim_Server_Script/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
 echo $latestScript
 }
@@ -1118,7 +1120,6 @@ currentPortCheck=$(perl -n -e '/\-public "?([^"]+)"?$/ && print "$1\n"' ${valhei
   fi
 }
 
-
 function display_public_IP() {
 externalip=$(curl -s ipecho.net/plain;echo)
 echo -e '\E[32m'"$EXTERNAL_IP $whateverzerowantstocalthis "$externalip ; tput setaf 9;
@@ -1127,13 +1128,27 @@ echo -e '\E[32m'"$EXTERNAL_IP $whateverzerowantstocalthis "$externalip ; tput se
 function display_local_IP() {
 internalip=$(hostname -I)
 echo -e '\E[32m'"$INTERNAL_IP $mymommyboughtmeaputerforchristmas "$internalip ; tput setaf 9;
-
 }
 
 function are_you_connected() {
 ping -c 1 google.com &> /dev/null && echo -e '\E[32m'"$INTERNET_MSG $tecreset $INTERNET_MSG_CONNECTED" || echo -e '\E[32m'"$INTERNET_MSG $tecreset $INTERNET_MSG_DISCONNECTED"
-
 }
+
+function are_mods_enabled() {
+modstrue=$( cat /lib/systemd/system/valheimserver.service | grep bepinex)
+var2="ExecStart=/home/steam/valheimserver/start_server_bepinex.sh"
+var3="ExecStart=/home/steam/valheimserver/start_valw_bepinex.sh"
+if [[ $modstrue == $var2 ]]; then
+        echo "Enabled with ValheimPlus"
+elif
+   [[ $modstrue == $var3 ]]; then
+        echo "Enabled with BepInEx"
+else
+        echo "Disable"
+fi
+}
+
+
 function menu_header() {
 get_current_config
 echo -ne "
@@ -1148,7 +1163,8 @@ $(ColorOrange '║ '"$FUNCTION_HEADER_MENU_INFO_VALHEIM_OFFICIAL_BUILD"'')" $(ch
 echo -ne "
 $(ColorOrange '║ '"$FUNCTION_HEADER_MENU_INFO_VALHEIM_LOCAL_BUILD"' ')"        $(check_local_valheim_build)
 echo -ne "
-$(ColorOrange '║') $FUNCTION_HEADER_MENU_INFO_SERVER_NAME ${currentDisplayName}
+$(ColorOrange '║') $FUNCTION_HEADER_MENU_INFO_SERVER_NAME" ${currentDisplayName}
+echo -ne " 
 $(ColorOrange '║') $(are_you_connected)
 $(ColorOrange '║')" $(display_public_IP)
 echo -ne "
