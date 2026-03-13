@@ -17,7 +17,11 @@
 <br />
 <p align="center">
     <img src="https://user-images.githubusercontent.com/16698453/121806056-7a853e00-cc4e-11eb-9a7c-0d97ac63bb02.png" />
-  <h3 align="center">Njord Menu 3.0 "Lofn's Love" Updated: 14-June-2021</h3>
+  <h3 align="center">Njord Menu 4.0 "Thor" Last Validation -> 08-JAN-2025</h3>
+
+
+![image](https://user-images.githubusercontent.com/16698453/233879349-b3423877-be32-45b4-9cfc-e2f76914967b.png)
+
 
   <p align="center">
     So easy a Viking can do it!
@@ -37,6 +41,8 @@
   </p>
 </p>
 
+* BETA Branch has the web GUI we are working on. Please feel free to help us make it awesome. Only use the BETA branch, if you know what you are doing. 
+    
 
 ## Server Hosting Provided By DigitalOcean
 * https://m.do.co/c/9d2217a2725c
@@ -82,10 +88,9 @@ How to video: https://www.youtube.com/watch?v=E1oGIP0w06Q
 
 * If you wish to Tip: https://www.patreon.com/zerobandwidth o
 * https://www.buymeacoffee.com/zerobandwidth
-* ETH: 0x691922a6b7d4005392Fb48A626B9ad17f68D66A5
-* VET: 0x6a2e7c13606e07d57664821a0d9920da75719c01
 
-## Discord for Tech Support https://discord.gg/ejgQUfc
+
+## Discord for Tech Support [https://discord.gg/QX5pGRNxXS](https://discord.gg/QX5pGRNxXS)
 
 ### Built With
 
@@ -139,7 +144,7 @@ To get a local copy up and running follow these simple example steps.
 1. Verify GIT and Net Tools is installed
 =
 ```sh
-sudo apt install -y git net-tools
+sudo apt update && install git net-tools
 ```
 2. Change directory to OPT for installation script (Advance User do what you wish)
 =
